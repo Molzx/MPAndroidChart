@@ -48,6 +48,8 @@ public abstract class BaseDataSet<T extends Entry> implements IDataSet<T> {
      */
     protected boolean mHighlightEnabled = true;
 
+    protected boolean mHighlightValue = false;
+
     /**
      * custom formatter that is used instead of the auto-formatter if set
      */
@@ -271,6 +273,16 @@ public abstract class BaseDataSet<T extends Entry> implements IDataSet<T> {
     @Override
     public boolean isHighlightEnabled() {
         return mHighlightEnabled;
+    }
+
+    @Override
+    public void setHighlightValueEnabled(boolean enabled) {
+        mHighlightValue = enabled;
+    }
+
+    @Override
+    public boolean isHighlightValueEnabled() {
+        return mHighlightValue;
     }
 
     @Override

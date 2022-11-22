@@ -7,7 +7,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.core.content.ContextCompat;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,8 +39,8 @@ import java.util.List;
 /**
  * Example of a dual axis {@link LineChart} with multiple data sets.
  *
- * @since 1.7.4
  * @version 3.1.0
+ * @since 1.7.4
  */
 public class LineChartActivity2 extends DemoBase implements OnSeekBarChangeListener,
         OnChartValueSelectedListener {
@@ -138,14 +140,14 @@ public class LineChartActivity2 extends DemoBase implements OnSeekBarChangeListe
         ArrayList<Entry> values1 = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
-            float val = (float) (Math.random() * (range / 2f)) + 50;
+            float val = (float) (Math.random() * (range / 2f)) + 80;
             values1.add(new Entry(i, val));
         }
 
         ArrayList<Entry> values2 = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
-            float val = (float) (Math.random() * range) + 450;
+            float val = (float) (Math.random() * range * 30);
             values2.add(new Entry(i, val));
         }
 
@@ -170,33 +172,61 @@ public class LineChartActivity2 extends DemoBase implements OnSeekBarChangeListe
             chart.notifyDataSetChanged();
         } else {
             // create a dataset and give it a type
-            set1 = new LineDataSet(values1, "DataSet 1");
+            set1 = new LineDataSet(values1, "Horizontal");
 
             set1.setAxisDependency(AxisDependency.LEFT);
-            set1.setColor(ColorTemplate.getHoloBlue());
-            set1.setCircleColor(Color.WHITE);
             set1.setLineWidth(2f);
-            set1.setCircleRadius(3f);
-            set1.setFillAlpha(65);
-            set1.setFillColor(ColorTemplate.getHoloBlue());
-            set1.setHighLightColor(Color.rgb(244, 117, 117));
-            set1.setDrawCircleHole(false);
+            set1.setValueTextColor(android.R.color.black);
+            set1.setColoringMode(LineDataSet.ColoringGradientMode.GRADIENT_HORIZONTAL);
+
+//	        set1.setColoringMode(LineDataSet.ColoringGradientMode.GRADIENT_VERTICAL);
+            set1.setColors(ContextCompat.getColor(this, R.color.rating_store_9),
+                    ContextCompat.getColor(this, R.color.rating_store_8),
+                    ContextCompat.getColor(this, R.color.rating_store_7),
+                    ContextCompat.getColor(this, R.color.rating_store_6),
+                    ContextCompat.getColor(this, R.color.rating_store_4),
+                    ContextCompat.getColor(this, R.color.rating_store_3),
+                    ContextCompat.getColor(this, R.color.rating_store_2),
+                    ContextCompat.getColor(this, R.color.rating_store_1),
+                    ContextCompat.getColor(this, R.color.rating_store_0));
+            set1.setDrawCircles(true);
+            set1.setDrawCircleHole(true);
+            set1.setDrawCirclesHighlight(true);
+            set1.setDrawHighlightIndicators(false);
+            set1.setHighlightValueEnabled(true);
             //set1.setFillFormatter(new MyFillFormatter(0f));
             //set1.setDrawHorizontalHighlightIndicator(false);
             //set1.setVisible(false);
             //set1.setCircleHoleColor(Color.WHITE);
 
             // create a dataset and give it a type
-            set2 = new LineDataSet(values2, "DataSet 2");
+            set2 = new LineDataSet(values2, "Vertical");
             set2.setAxisDependency(AxisDependency.RIGHT);
-            set2.setColor(Color.RED);
-            set2.setCircleColor(Color.WHITE);
+            set2.setCircleColor(Color.TRANSPARENT);
             set2.setLineWidth(2f);
-            set2.setCircleRadius(3f);
+//            set2.setCircleRadius(3f);
+            set2.setCircleHoleRadius(5f);
+            set2.setCircleRadius(7f);
             set2.setFillAlpha(65);
             set2.setFillColor(Color.RED);
-            set2.setDrawCircleHole(false);
             set2.setHighLightColor(Color.rgb(244, 117, 117));
+            set2.setValueTextColor(android.R.color.black);
+            set2.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+            set2.setColoringMode(LineDataSet.ColoringGradientMode.GRADIENT_VERTICAL);
+//	        set2.setColoringMode(LineDataSet.ColoringGradientMode.GRADIENT_HORIZONTAL);
+            set2.setColors(ContextCompat.getColor(this, R.color.rating_store_9),
+                    ContextCompat.getColor(this, R.color.rating_store_8),
+                    ContextCompat.getColor(this, R.color.rating_store_7),
+                    ContextCompat.getColor(this, R.color.rating_store_6),
+                    ContextCompat.getColor(this, R.color.rating_store_4),
+                    ContextCompat.getColor(this, R.color.rating_store_3),
+                    ContextCompat.getColor(this, R.color.rating_store_2),
+                    ContextCompat.getColor(this, R.color.rating_store_1),
+                    ContextCompat.getColor(this, R.color.rating_store_0));
+            set2.setDrawCircles(false);
+            set2.setDrawCircleHole(true);
+            set2.setDrawCirclesHighlight(true);
+            set2.setHighlightValueEnabled(true);
             //set2.setFillFormatter(new MyFillFormatter(900f));
 
             set3 = new LineDataSet(values3, "DataSet 3");
@@ -209,11 +239,17 @@ public class LineChartActivity2 extends DemoBase implements OnSeekBarChangeListe
             set3.setFillColor(ColorTemplate.colorWithAlpha(Color.YELLOW, 200));
             set3.setDrawCircleHole(false);
             set3.setHighLightColor(Color.rgb(244, 117, 117));
+            set3.setHighlightValueEnabled(true);
 
-            // create a data object with the data sets
+            // create a data object with the datasets
             LineData data = new LineData(set1, set2, set3);
+//            LineData data = new LineData(set1, set2);
             data.setValueTextColor(Color.WHITE);
             data.setValueTextSize(9f);
+
+            set1.setDrawValues(false);
+            set2.setDrawValues(false);
+            set3.setDrawValues(true);
 
             // set data
             chart.setData(data);
@@ -382,6 +418,7 @@ public class LineChartActivity2 extends DemoBase implements OnSeekBarChangeListe
     @Override
     protected void saveToGallery() {
         saveToGallery(chart, "LineChartActivity2");
+
     }
 
     @Override
@@ -402,8 +439,10 @@ public class LineChartActivity2 extends DemoBase implements OnSeekBarChangeListe
     }
 
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {}
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
 
     @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {}
+    public void onStopTrackingTouch(SeekBar seekBar) {
+    }
 }
